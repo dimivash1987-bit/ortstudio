@@ -26,7 +26,10 @@ const SWIPE_THRESHOLD = 48;
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
 
-function touchDistance(a: Touch, b: Touch) {
+function touchDistance(
+  a: { clientX: number; clientY: number },
+  b: { clientX: number; clientY: number },
+) {
   return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
 }
 
