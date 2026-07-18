@@ -38,6 +38,7 @@ type ZoomableImageProps = {
   alt: string;
   onSwipeLeft: () => void;
   onSwipeRight: () => void;
+  onRequestClose: () => void;
 };
 
 function ZoomableImage({
@@ -45,6 +46,7 @@ function ZoomableImage({
   alt,
   onSwipeLeft,
   onSwipeRight,
+  onRequestClose,
 }: ZoomableImageProps) {
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -139,7 +141,6 @@ function ZoomableImage({
     e.stopPropagation();
 
     if (e.touches.length > 0) {
-      // ещё есть пальцы — не завершаем жест
       if (e.touches.length === 1 && scaleRef.current > 1) {
         const t = e.touches[0];
         panStart.current = {
@@ -152,7 +153,6 @@ function ZoomableImage({
       return;
     }
 
-    // свайп только без зума
     if (swipeStart.current && scaleRef.current <= 1) {
       const t = e.changedTouches[0];
       const dx = t.clientX - swipeStart.current.x;
@@ -163,7 +163,6 @@ function ZoomableImage({
       }
     }
 
-    // double-tap zoom
     if (!moved.current && e.changedTouches.length === 1) {
       const now = Date.now();
       if (now - lastTap.current < 280) {
@@ -186,27 +185,37 @@ function ZoomableImage({
 
   return (
     <div
-      className="relative flex max-h-[75vh] max-w-full touch-none items-center justify-center overflow-hidden"
-      onClick={(e) => e.stopPropagation()}
+      className="absolute inset-0 z-[1] touch-none overflow-hidden"
+      onClick={() => {
+        if (scaleRef.current > 1) {
+          apply(1, { x: 0, y: 0 });
+        } else {
+          onRequestClose();
+        }
+      }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
       onTouchCancel={onTouchEnd}
     >
-      <Image
-        src={src}
-        alt={alt}
-        width={1600}
-        height={1200}
-        sizes="100vw"
-        priority
-        draggable={false}
-        className="max-h-[75vh] w-auto max-w-full object-contain select-none"
-        style={{
-          transform: `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})`,
-          transition: gesturing ? "none" : "transform 0.2s ease",
-        }}
-      />
+      <div className="flex h-full w-full items-center justify-center">
+        <Image
+          src={src}
+          alt={alt}
+          width={1600}
+          height={1200}
+          sizes="100vw"
+          priority
+          draggable={false}
+          className="max-h-[100dvh] max-w-[100vw] object-contain select-none"
+          style={{
+            transform: `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})`,
+            transition: gesturing ? "none" : "transform 0.2s ease",
+            transformOrigin: "center center",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
     </div>
   );
 }
@@ -280,57 +289,48 @@ export function Portfolio({ projects }: PortfolioProps) {
 
       {active ? (
         <div
-          className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ink/90 p-4 md:p-8"
+          className="fixed inset-0 z-[60] bg-ink/90"
           role="dialog"
           aria-modal="true"
           aria-label={active.title}
-          onClick={close}
         >
+          <ZoomableImage
+            src={active.images[index]}
+            alt={`${active.title} — фото ${index + 1}`}
+            onSwipeLeft={next}
+            onSwipeRight={prev}
+            onRequestClose={close}
+          />
+
           <button
             type="button"
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 md:right-8 md:top-8"
-            onClick={(e) => {
-              e.stopPropagation();
-              close();
-            }}
+            className="absolute right-4 top-4 z-20 rounded-full bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 md:right-8 md:top-8"
+            onClick={close}
           >
             Закрыть
           </button>
 
           <button
             type="button"
-            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:left-6 md:py-6"
-            onClick={(e) => {
-              e.stopPropagation();
-              prev();
-            }}
+            className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:left-6 md:py-6"
+            onClick={prev}
             aria-label="Предыдущее фото"
           >
             ‹
           </button>
 
-          <ZoomableImage
-            src={active.images[index]}
-            alt={`${active.title} — фото ${index + 1}`}
-            onSwipeLeft={next}
-            onSwipeRight={prev}
-          />
-
-          <p className="pointer-events-none mt-4 text-center text-sm text-white/80">
-            {active.title} · {index + 1} / {active.images.length}
-          </p>
-
           <button
             type="button"
-            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:right-6 md:py-6"
-            onClick={(e) => {
-              e.stopPropagation();
-              next();
-            }}
+            className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:right-6 md:py-6"
+            onClick={next}
             aria-label="Следующее фото"
           >
             ›
           </button>
+
+          <p className="pointer-events-none absolute inset-x-0 bottom-6 z-20 text-center text-sm text-white/80">
+            {active.title} · {index + 1} / {active.images.length}
+          </p>
         </div>
       ) : null}
     </section>
