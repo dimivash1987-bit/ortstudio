@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import { SectionHeading } from "@/components/SectionHeading";
 
 export type PortfolioProject = {
@@ -17,11 +23,194 @@ type PortfolioProps = {
 };
 
 const SWIPE_THRESHOLD = 48;
+const MIN_SCALE = 1;
+const MAX_SCALE = 4;
+
+function touchDistance(a: Touch, b: Touch) {
+  return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+}
+
+type ZoomableImageProps = {
+  src: string;
+  alt: string;
+  onSwipeLeft: () => void;
+  onSwipeRight: () => void;
+};
+
+function ZoomableImage({
+  src,
+  alt,
+  onSwipeLeft,
+  onSwipeRight,
+}: ZoomableImageProps) {
+  const [scale, setScale] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [gesturing, setGesturing] = useState(false);
+
+  const scaleRef = useRef(1);
+  const offsetRef = useRef({ x: 0, y: 0 });
+  const pinchStartDist = useRef(0);
+  const pinchStartScale = useRef(1);
+  const panStart = useRef<{ x: number; y: number; ox: number; oy: number } | null>(
+    null,
+  );
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  const lastTap = useRef(0);
+  const moved = useRef(false);
+
+  const apply = useCallback((nextScale: number, nextOffset: { x: number; y: number }) => {
+    const s = Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
+    const o = s === 1 ? { x: 0, y: 0 } : nextOffset;
+    scaleRef.current = s;
+    offsetRef.current = o;
+    setScale(s);
+    setOffset(o);
+  }, []);
+
+  useEffect(() => {
+    apply(1, { x: 0, y: 0 });
+  }, [src, apply]);
+
+  const onTouchStart = (e: ReactTouchEvent) => {
+    e.stopPropagation();
+    moved.current = false;
+    setGesturing(true);
+
+    if (e.touches.length === 2) {
+      pinchStartDist.current = touchDistance(e.touches[0], e.touches[1]);
+      pinchStartScale.current = scaleRef.current;
+      panStart.current = null;
+      swipeStart.current = null;
+      return;
+    }
+
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      if (scaleRef.current > 1) {
+        panStart.current = {
+          x: t.clientX,
+          y: t.clientY,
+          ox: offsetRef.current.x,
+          oy: offsetRef.current.y,
+        };
+        swipeStart.current = null;
+      } else {
+        swipeStart.current = { x: t.clientX, y: t.clientY };
+        panStart.current = null;
+      }
+    }
+  };
+
+  const onTouchMove = (e: ReactTouchEvent) => {
+    e.stopPropagation();
+
+    if (e.touches.length === 2 && pinchStartDist.current > 0) {
+      moved.current = true;
+      const dist = touchDistance(e.touches[0], e.touches[1]);
+      const next = pinchStartScale.current * (dist / pinchStartDist.current);
+      apply(next, offsetRef.current);
+      return;
+    }
+
+    if (e.touches.length === 1 && panStart.current && scaleRef.current > 1) {
+      moved.current = true;
+      const t = e.touches[0];
+      apply(scaleRef.current, {
+        x: panStart.current.ox + (t.clientX - panStart.current.x),
+        y: panStart.current.oy + (t.clientY - panStart.current.y),
+      });
+    }
+
+    if (e.touches.length === 1 && swipeStart.current) {
+      const t = e.touches[0];
+      if (
+        Math.abs(t.clientX - swipeStart.current.x) > 10 ||
+        Math.abs(t.clientY - swipeStart.current.y) > 10
+      ) {
+        moved.current = true;
+      }
+    }
+  };
+
+  const onTouchEnd = (e: ReactTouchEvent) => {
+    e.stopPropagation();
+
+    if (e.touches.length > 0) {
+      // ещё есть пальцы — не завершаем жест
+      if (e.touches.length === 1 && scaleRef.current > 1) {
+        const t = e.touches[0];
+        panStart.current = {
+          x: t.clientX,
+          y: t.clientY,
+          ox: offsetRef.current.x,
+          oy: offsetRef.current.y,
+        };
+      }
+      return;
+    }
+
+    // свайп только без зума
+    if (swipeStart.current && scaleRef.current <= 1) {
+      const t = e.changedTouches[0];
+      const dx = t.clientX - swipeStart.current.x;
+      const dy = t.clientY - swipeStart.current.y;
+      if (Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) onSwipeLeft();
+        else onSwipeRight();
+      }
+    }
+
+    // double-tap zoom
+    if (!moved.current && e.changedTouches.length === 1) {
+      const now = Date.now();
+      if (now - lastTap.current < 280) {
+        if (scaleRef.current > 1) {
+          apply(1, { x: 0, y: 0 });
+        } else {
+          apply(2.5, { x: 0, y: 0 });
+        }
+        lastTap.current = 0;
+      } else {
+        lastTap.current = now;
+      }
+    }
+
+    pinchStartDist.current = 0;
+    panStart.current = null;
+    swipeStart.current = null;
+    setGesturing(false);
+  };
+
+  return (
+    <div
+      className="relative flex max-h-[75vh] max-w-full touch-none items-center justify-center overflow-hidden"
+      onClick={(e) => e.stopPropagation()}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={onTouchEnd}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={1600}
+        height={1200}
+        sizes="100vw"
+        priority
+        draggable={false}
+        className="max-h-[75vh] w-auto max-w-full object-contain select-none"
+        style={{
+          transform: `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})`,
+          transition: gesturing ? "none" : "transform 0.2s ease",
+        }}
+      />
+    </div>
+  );
+}
 
 export function Portfolio({ projects }: PortfolioProps) {
   const [active, setActive] = useState<PortfolioProject | null>(null);
   const [index, setIndex] = useState(0);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const close = useCallback(() => setActive(null), []);
   const prev = useCallback(() => {
@@ -48,25 +237,6 @@ export function Portfolio({ projects }: PortfolioProps) {
       document.body.style.overflow = prevOverflow;
     };
   }, [active, close, prev, next]);
-
-  const onTouchStart = (e: TouchEvent) => {
-    const t = e.changedTouches[0];
-    touchStart.current = { x: t.clientX, y: t.clientY };
-  };
-
-  const onTouchEnd = (e: TouchEvent) => {
-    if (!touchStart.current) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - touchStart.current.x;
-    const dy = t.clientY - touchStart.current.y;
-    touchStart.current = null;
-
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
-    if (Math.abs(dx) < Math.abs(dy)) return; // вертикальный жест — игнор
-
-    if (dx < 0) next();
-    else prev();
-  };
 
   return (
     <section id="portfolio" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
@@ -107,13 +277,11 @@ export function Portfolio({ projects }: PortfolioProps) {
 
       {active ? (
         <div
-          className="fixed inset-0 z-[60] flex touch-pan-y flex-col items-center justify-center bg-ink/90 p-4 md:p-8"
+          className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ink/90 p-4 md:p-8"
           role="dialog"
           aria-modal="true"
           aria-label={active.title}
           onClick={close}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
         >
           <button
             type="button"
@@ -138,17 +306,11 @@ export function Portfolio({ projects }: PortfolioProps) {
             ‹
           </button>
 
-          {/* Только сама картинка блокирует закрытие — поля вокруг закрывают лайтбокс */}
-          <Image
+          <ZoomableImage
             src={active.images[index]}
             alt={`${active.title} — фото ${index + 1}`}
-            width={1600}
-            height={1200}
-            sizes="100vw"
-            priority
-            className="max-h-[75vh] w-auto max-w-full object-contain select-none"
-            draggable={false}
-            onClick={(e) => e.stopPropagation()}
+            onSwipeLeft={next}
+            onSwipeRight={prev}
           />
 
           <p className="pointer-events-none mt-4 text-center text-sm text-white/80">
