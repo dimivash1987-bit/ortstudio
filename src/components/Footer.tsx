@@ -11,8 +11,6 @@ export function Footer() {
         </p>
         <p className="text-sm text-ink-muted">
           © {year} · Дизайн интерьера · {site.city}
-          <span className="mx-2 text-line">·</span>
-          HarmonyOS Sans
         </p>
       </div>
     </footer>
