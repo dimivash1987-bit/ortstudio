@@ -127,7 +127,7 @@ export function Portfolio({ projects }: PortfolioProps) {
 
           <button
             type="button"
-            className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/10 px-3 py-6 text-white hover:bg-white/20 md:left-6 md:block"
+            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:left-6 md:py-6"
             onClick={(e) => {
               e.stopPropagation();
               prev();
@@ -156,7 +156,7 @@ export function Portfolio({ projects }: PortfolioProps) {
 
           <button
             type="button"
-            className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/10 px-3 py-6 text-white hover:bg-white/20 md:right-6 md:block"
+            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 px-3 py-5 text-2xl leading-none text-white hover:bg-white/20 md:right-6 md:py-6"
             onClick={(e) => {
               e.stopPropagation();
               next();
