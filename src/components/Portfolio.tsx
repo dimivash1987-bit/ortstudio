@@ -47,16 +47,7 @@ export function Portfolio({ projects }: PortfolioProps) {
   return (
     <section id="portfolio" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
-          <p className="text-sm uppercase tracking-[0.18em] text-accent">Портфолио</p>
-          <h2 className="mt-3 text-4xl font-medium text-ink md:text-5xl">
-            Реализованные пространства
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
-            Квартиры, дома и специальные объекты — от планировки до финального
-            образа интерьера.
-          </p>
-        </div>
+        <h2 className="text-sm uppercase tracking-[0.18em] text-accent">Портфолио</h2>
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
