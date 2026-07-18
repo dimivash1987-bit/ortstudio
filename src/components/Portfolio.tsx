@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import { SectionHeading } from "@/components/SectionHeading";
 
 export type PortfolioProject = {
   slug: string;
@@ -70,7 +71,7 @@ export function Portfolio({ projects }: PortfolioProps) {
   return (
     <section id="portfolio" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <h2 className="text-sm uppercase tracking-[0.18em] text-accent">Портфолио</h2>
+        <SectionHeading>Портфолио</SectionHeading>
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (

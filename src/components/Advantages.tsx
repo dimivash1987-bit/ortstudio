@@ -1,4 +1,5 @@
 import { advantages } from "@/data/advantages";
+import { SectionHeading } from "@/components/SectionHeading";
 
 export function Advantages() {
   return (
@@ -7,13 +8,9 @@ export function Advantages() {
       className="scroll-mt-24 border-y border-line bg-bg-elevated px-5 py-20 md:px-8 md:py-28"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
-          <h2 className="text-4xl font-medium text-ink md:text-5xl">
-            Наши преимущества
-          </h2>
-        </div>
+        <SectionHeading>Наши преимущества</SectionHeading>
 
-        <ol className="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-2">
+        <ol className="mt-12 grid gap-x-10 gap-y-12 md:grid-cols-2">
           {advantages.map((item, i) => (
             <li key={item.title} className="border-t border-line pt-6">
               <div className="flex items-start gap-4">

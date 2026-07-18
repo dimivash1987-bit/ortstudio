@@ -1,19 +1,15 @@
 import { pricingDisclaimer, pricingPackages } from "@/data/pricing";
+import { SectionHeading } from "@/components/SectionHeading";
 
 export function Pricing() {
   return (
     <section id="pricing" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
-          <p className="text-sm uppercase tracking-[0.18em] text-accent">Стоимость</p>
-          <h2 className="mt-3 text-4xl font-medium text-ink md:text-5xl">
-            Пакеты услуг
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
-            Два формата работы — от полного дизайн-проекта до реализации с
-            авторским надзором.
-          </p>
-        </div>
+        <SectionHeading>Стоимость</SectionHeading>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
+          Два формата работы — от полного дизайн-проекта до реализации с
+          авторским надзором.
+        </p>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {pricingPackages.map((pkg) => (

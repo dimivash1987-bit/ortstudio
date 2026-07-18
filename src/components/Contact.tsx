@@ -1,5 +1,6 @@
 import { site } from "@/data/site";
 import { ContactForm } from "@/components/ContactForm";
+import { SectionHeading } from "@/components/SectionHeading";
 
 export function Contact() {
   return (
@@ -9,10 +10,7 @@ export function Contact() {
     >
       <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1fr_1.1fr]">
         <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-accent">Контакты</p>
-          <h2 className="mt-3 text-4xl font-medium text-ink md:text-5xl">
-            Обсудим ваш объект
-          </h2>
+          <SectionHeading>Контакты</SectionHeading>
           <p className="mt-4 max-w-md text-base leading-relaxed text-ink-muted md:text-lg">
             Напишите или позвоните — расскажем о формате работы и подготовим
             ориентир по срокам и стоимости.
