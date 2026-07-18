@@ -68,7 +68,7 @@ export async function POST(request: Request) {
   });
 
   const text = [
-    "Новая заявка с сайта ORT Studio",
+    "Новая заявка с сайта ORTSTUDIO",
     "",
     `Имя: ${name}`,
     `Телефон: ${phone}`,
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
 
   try {
     await transporter.sendMail({
-      from: `"ORT Studio сайт" <${user}>`,
+      from: `"ORTSTUDIO сайт" <${user}>`,
       to: site.email,
       replyTo: email || undefined,
       subject: `Заявка с сайта: ${name}`,

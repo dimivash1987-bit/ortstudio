@@ -20,8 +20,7 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-accent-ink: var(--accent-ink);
-  --font-sans: var(--font-body-family), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-family), var(--font-body-family), ui-serif, Georgia, serif;
+  --font-sans: var(--font-harmony), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {

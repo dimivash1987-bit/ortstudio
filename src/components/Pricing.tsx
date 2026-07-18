@@ -6,12 +6,12 @@ export function Pricing() {
       <div className="mx-auto max-w-6xl">
         <div className="max-w-2xl">
           <p className="text-sm uppercase tracking-[0.18em] text-accent">Стоимость</p>
-          <h2 className="mt-3 font-display text-4xl text-ink md:text-5xl">
-            Ориентиры по Минску
+          <h2 className="mt-3 text-4xl font-medium text-ink md:text-5xl">
+            Пакеты услуг
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
-            Пока готовим точный прайс студии — ниже средние рыночные значения
-            по городу для двух основных форматов работы.
+            Два формата работы — от полного дизайн-проекта до реализации с
+            авторским надзором.
           </p>
         </div>
 
@@ -21,9 +21,9 @@ export function Pricing() {
               key={pkg.id}
               className="flex flex-col border border-line bg-bg-elevated p-7 md:p-9"
             >
-              <h3 className="font-display text-3xl text-ink">{pkg.title}</h3>
+              <h3 className="text-2xl font-medium text-ink md:text-3xl">{pkg.title}</h3>
               <p className="mt-2 text-sm text-ink-muted">{pkg.priceNote}</p>
-              <p className="mt-6 font-display text-4xl text-accent md:text-5xl">
+              <p className="mt-6 text-4xl font-medium text-accent md:text-5xl">
                 {pkg.priceLabel}
               </p>
               <p className="mt-4 text-base leading-relaxed text-ink-muted">

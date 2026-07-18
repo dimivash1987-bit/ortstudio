@@ -10,7 +10,7 @@ export function Contact() {
       <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-accent">Контакты</p>
-          <h2 className="mt-3 font-display text-4xl text-ink md:text-5xl">
+          <h2 className="mt-3 text-4xl font-medium text-ink md:text-5xl">
             Обсудим ваш объект
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-ink-muted md:text-lg">
@@ -49,7 +49,7 @@ export function Contact() {
         </div>
 
         <div className="border border-line bg-bg p-6 md:p-8">
-          <h3 className="font-display text-2xl text-ink">Форма заявки</h3>
+          <h3 className="text-2xl font-medium text-ink">Форма заявки</h3>
           <p className="mt-2 text-sm text-ink-muted">
             Заявка придёт на {site.email}
           </p>

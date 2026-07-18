@@ -6,9 +6,13 @@ export function Footer() {
   return (
     <footer className="border-t border-line px-5 py-10 md:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-display text-xl text-ink">{site.name}</p>
+        <p className="text-lg font-medium uppercase tracking-[0.06em] text-ink">
+          {site.name}
+        </p>
         <p className="text-sm text-ink-muted">
           © {year} · Дизайн интерьера · {site.city}
+          <span className="mx-2 text-line">·</span>
+          HarmonyOS Sans
         </p>
       </div>
     </footer>

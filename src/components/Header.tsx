@@ -39,7 +39,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:h-20 md:px-8">
         <a
           href="#top"
-          className="font-display text-2xl tracking-tight text-ink md:text-[1.75rem]"
+          className="text-lg font-medium uppercase tracking-[0.06em] text-ink md:text-xl"
           onClick={() => setOpen(false)}
         >
           {site.name}
@@ -95,7 +95,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="font-display text-3xl text-ink"
+              className="text-3xl font-medium uppercase tracking-[0.04em] text-ink"
               onClick={() => setOpen(false)}
             >
               {link.label}

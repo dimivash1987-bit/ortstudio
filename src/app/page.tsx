@@ -22,8 +22,7 @@ const projects: PortfolioProject[] = (portfolioData as PortfolioProject[]).map(
   }),
 );
 
-const heroImage =
-  projects.find((p) => p.slug === "kolodishchi")?.cover ?? projects[0]?.cover;
+const heroImage = "/portfolio/kolodishchi/kgc16.webp";
 
 export default function Home() {
   return (

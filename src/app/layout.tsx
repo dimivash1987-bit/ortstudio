@@ -1,26 +1,35 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { site } from "@/data/site";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
-  weight: ["500", "600"],
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-display-family",
-  display: "swap",
-});
-
-const body = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-body-family",
+const harmony = localFont({
+  src: [
+    {
+      path: "../../public/fonts/harmonyos-sans/HarmonyOS_Sans_Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/harmonyos-sans/HarmonyOS_Sans_Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/harmonyos-sans/HarmonyOS_Sans_Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-harmony",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — дизайн интерьера в Минске`,
+    default: `${site.name} — авторский дизайн интерьера в Минске`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
@@ -28,7 +37,7 @@ export const metadata: Metadata = {
     "дизайн интерьера Минск",
     "дизайн-проект квартиры",
     "авторский надзор",
-    "ORT Studio",
+    "ORTSTUDIO",
     "визуализация интерьера",
   ],
   authors: [{ name: site.name }],
@@ -38,12 +47,12 @@ export const metadata: Metadata = {
     locale: site.locale,
     url: site.url,
     siteName: site.name,
-    title: `${site.name} — дизайн интерьера в Минске`,
+    title: `${site.name} — авторский дизайн интерьера в Минске`,
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — дизайн интерьера в Минске`,
+    title: `${site.name} — авторский дизайн интерьера в Минске`,
     description: site.description,
   },
   robots: {
@@ -80,7 +89,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`${display.variable} ${body.variable} h-full`}>
+    <html lang="ru" className={`${harmony.variable} h-full`}>
       <body className="min-h-full bg-bg font-sans text-ink antialiased">
         <script
           type="application/ld+json"
