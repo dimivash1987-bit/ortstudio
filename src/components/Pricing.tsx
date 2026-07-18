@@ -5,11 +5,13 @@ export function Pricing() {
   return (
     <section id="pricing" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading>Стоимость</SectionHeading>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
-          Два формата работы — от полного дизайн-проекта до реализации с
-          авторским надзором.
-        </p>
+        <div className="max-w-2xl">
+          <SectionHeading>Стоимость</SectionHeading>
+          <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
+            Два формата работы — от полного дизайн-проекта до реализации с
+            авторским надзором.
+          </p>
+        </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {pricingPackages.map((pkg) => (
