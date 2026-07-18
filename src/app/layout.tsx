@@ -1,20 +1,77 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Header } from "@/components/Header";
+import { site } from "@/data/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const display = Cormorant_Garamond({
+  weight: ["500", "600"],
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-display-family",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const body = Manrope({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-body-family",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "ORT Studio",
-  description: "ORT Studio website",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} — дизайн интерьера в Минске`,
+    template: `%s · ${site.name}`,
+  },
+  description: site.description,
+  keywords: [
+    "дизайн интерьера Минск",
+    "дизайн-проект квартиры",
+    "авторский надзор",
+    "ORT Studio",
+    "визуализация интерьера",
+  ],
+  authors: [{ name: site.name }],
+  creator: site.name,
+  openGraph: {
+    type: "website",
+    locale: site.locale,
+    url: site.url,
+    siteName: site.name,
+    title: `${site.name} — дизайн интерьера в Минске`,
+    description: site.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} — дизайн интерьера в Минске`,
+    description: site.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "/",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "InteriorDesigner",
+  name: site.name,
+  url: site.url,
+  email: site.email,
+  telephone: site.phone,
+  description: site.description,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: site.city,
+    addressCountry: "BY",
+  },
+  areaServed: {
+    "@type": "City",
+    name: "Минск",
+  },
 };
 
 export default function RootLayout({
@@ -23,11 +80,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="ru" className={`${display.variable} ${body.variable} h-full`}>
+      <body className="min-h-full bg-bg font-sans text-ink antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }

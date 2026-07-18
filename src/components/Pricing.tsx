@@ -1,0 +1,56 @@
+import { pricingDisclaimer, pricingPackages } from "@/data/pricing";
+
+export function Pricing() {
+  return (
+    <section id="pricing" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-6xl">
+        <div className="max-w-2xl">
+          <p className="text-sm uppercase tracking-[0.18em] text-accent">Стоимость</p>
+          <h2 className="mt-3 font-display text-4xl text-ink md:text-5xl">
+            Ориентиры по Минску
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
+            Пока готовим точный прайс студии — ниже средние рыночные значения
+            по городу для двух основных форматов работы.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          {pricingPackages.map((pkg) => (
+            <article
+              key={pkg.id}
+              className="flex flex-col border border-line bg-bg-elevated p-7 md:p-9"
+            >
+              <h3 className="font-display text-3xl text-ink">{pkg.title}</h3>
+              <p className="mt-2 text-sm text-ink-muted">{pkg.priceNote}</p>
+              <p className="mt-6 font-display text-4xl text-accent md:text-5xl">
+                {pkg.priceLabel}
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-ink-muted">
+                {pkg.description}
+              </p>
+              <ul className="mt-8 space-y-3 border-t border-line pt-6">
+                {pkg.includes.map((item) => (
+                  <li key={item} className="flex gap-3 text-sm text-ink md:text-base">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#contacts"
+                className="mt-10 inline-flex w-fit rounded-full bg-ink px-5 py-3 text-sm text-bg transition-colors hover:bg-accent"
+              >
+                Запросить расчёт
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <p className="mt-8 max-w-3xl text-sm leading-relaxed text-ink-muted">
+          {pricingDisclaimer}
+        </p>
+      </div>
+    </section>
+  );
+}
