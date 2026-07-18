@@ -5,7 +5,7 @@ export default function Home() {
         Hello, ORT Studio
       </h1>
       <p className="mt-3 text-lg text-zinc-600 dark:text-zinc-400">
-        Next.js → GitHub → Vercel
+        Pipeline OK: Next.js → GitHub → Vercel
       </p>
     </main>
   );
