@@ -284,9 +284,6 @@ export function Portfolio({ projects }: PortfolioProps) {
                   </span>
                 ) : null}
               </div>
-              <p className="mt-1 text-sm text-ink-muted">
-                {project.images.length} фото
-              </p>
             </button>
           ))}
         </div>
