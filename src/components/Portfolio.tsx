@@ -256,7 +256,7 @@ export function Portfolio({ projects }: PortfolioProps) {
       <div className="mx-auto max-w-6xl">
         <SectionHeading>Портфолио</SectionHeading>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <button
               key={project.slug}
@@ -276,7 +276,7 @@ export function Portfolio({ projects }: PortfolioProps) {
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
               </div>
-              <div className="mt-3 flex items-baseline justify-between gap-3">
+              <div className="mt-2 flex items-baseline justify-between gap-3">
                 <h3 className="text-lg text-ink">{project.title}</h3>
                 {project.location ? (
                   <span className="shrink-0 text-sm text-ink-muted">
