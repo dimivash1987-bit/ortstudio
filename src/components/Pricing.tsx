@@ -19,15 +19,15 @@ export function Pricing() {
               key={pkg.id}
               className="grid grid-rows-[auto_auto_1fr_auto] border border-line bg-bg-elevated p-7 md:p-8"
             >
-              <div className="min-h-[5.5rem] md:min-h-[6.75rem]">
+              <div className="min-h-[4.25rem] md:min-h-[5.25rem]">
                 <h3 className="text-xl font-medium leading-snug text-ink md:text-2xl">
                   {pkg.title}
                 </h3>
               </div>
-              <p className="mt-6 text-3xl font-medium text-accent md:text-4xl">
+              <p className="mt-4 text-3xl font-medium text-accent md:text-4xl">
                 {pkg.priceLabel}
               </p>
-              <p className="mt-5 text-sm leading-relaxed text-ink-muted md:text-base">
+              <p className="mt-4 text-sm leading-relaxed text-ink-muted md:text-base">
                 {pkg.description}
               </p>
               <a
