@@ -19,7 +19,7 @@ export function Pricing() {
               key={pkg.id}
               className="grid grid-rows-[auto_auto_1fr_auto] border border-line bg-bg-elevated p-7 md:p-8"
             >
-              <div className="flex min-h-[5.5rem] items-end md:min-h-[6.75rem]">
+              <div className="min-h-[5.5rem] md:min-h-[6.75rem]">
                 <h3 className="text-xl font-medium leading-snug text-ink md:text-2xl">
                   {pkg.title}
                 </h3>
