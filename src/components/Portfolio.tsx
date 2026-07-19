@@ -13,9 +13,10 @@ import { SectionHeading } from "@/components/SectionHeading";
 export type PortfolioProject = {
   slug: string;
   title: string;
-  location: string;
+  location?: string;
   cover: string;
   images: string[];
+  order?: number;
 };
 
 type PortfolioProps = {
@@ -277,7 +278,11 @@ export function Portfolio({ projects }: PortfolioProps) {
               </div>
               <div className="mt-3 flex items-baseline justify-between gap-3">
                 <h3 className="text-lg text-ink">{project.title}</h3>
-                <span className="shrink-0 text-sm text-ink-muted">{project.location}</span>
+                {project.location ? (
+                  <span className="shrink-0 text-sm text-ink-muted">
+                    {project.location}
+                  </span>
+                ) : null}
               </div>
               <p className="mt-1 text-sm text-ink-muted">
                 {project.images.length} фото

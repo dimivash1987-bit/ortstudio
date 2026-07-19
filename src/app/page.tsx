@@ -6,23 +6,9 @@ import { Portfolio, type PortfolioProject } from "@/components/Portfolio";
 import { Pricing } from "@/components/Pricing";
 import portfolioData from "@/data/portfolio.json";
 
-const titleOverrides: Record<string, string> = {
-  "apartments-1": "Апартаменты I",
-  "apartments-2": "Апартаменты II",
-  "zg-1": "Квартира ЗГ I",
-  "zg-2": "Квартира ЗГ II",
-  "zg-3": "Квартира ЗГ III",
-  "dom-ny": "Загородный дом",
-};
+const projects = (portfolioData as PortfolioProject[]).slice();
 
-const projects: PortfolioProject[] = (portfolioData as PortfolioProject[]).map(
-  (p) => ({
-    ...p,
-    title: titleOverrides[p.slug] ?? p.title,
-  }),
-);
-
-const heroImage = "/portfolio/kolodishchi/kgc16.webp";
+const heroImage = projects[0]?.cover ?? "/portfolio/placeholder.webp";
 
 export default function Home() {
   return (

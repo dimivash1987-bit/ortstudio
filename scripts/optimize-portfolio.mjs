@@ -5,86 +5,190 @@ import sharp from "sharp";
 const ROOT = process.cwd();
 const SRC = path.join(ROOT, "port");
 const OUT = path.join(ROOT, "public", "portfolio");
+const MANIFEST = path.join(ROOT, "src", "data", "portfolio.json");
 
-/** @type {Record<string, { slug: string; title: string; location: string }>} */
-const PROJECTS = {
-  алибегова: { slug: "alibegova", title: "Квартира на Алибегова", location: "Минск" },
-  апарты1: { slug: "apartments-1", title: "Апартаменты", location: "Минск" },
-  апарты2: { slug: "apartments-2", title: "Апартаменты", location: "Минск" },
-  баня: { slug: "banya", title: "Баня", location: "Беларусь" },
-  глебки: { slug: "glebki", title: "Дом в Глебках", location: "Глебки" },
-  "дом НЙ": { slug: "dom-ny", title: "Загородный дом", location: "Беларусь" },
-  ЗГ1: { slug: "zg-1", title: "Квартира ЗГ", location: "Минск" },
-  ЗГ2: { slug: "zg-2", title: "Квартира ЗГ", location: "Минск" },
-  ЗГ3: { slug: "zg-3", title: "Квартира ЗГ", location: "Минск" },
-  кинотеатр: { slug: "cinema", title: "Домашний кинотеатр", location: "Минск" },
-  княгининская: { slug: "knyagininskaya", title: "Квартира на Княгининской", location: "Минск" },
-  колодищи: { slug: "kolodishchi", title: "Дом в Колодищах", location: "Колодищи" },
-  "минск мир1": { slug: "minsk-mir", title: "Квартира в Минск Мир", location: "Минск" },
-  "северный берег": { slug: "severny-bereg", title: "Северный берег", location: "Минск" },
+const CYR_TO_LAT = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  е: "e",
+  ё: "e",
+  ж: "zh",
+  з: "z",
+  и: "i",
+  й: "y",
+  к: "k",
+  л: "l",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "ts",
+  ч: "ch",
+  ш: "sh",
+  щ: "sch",
+  ъ: "",
+  ы: "y",
+  ь: "",
+  э: "e",
+  ю: "yu",
+  я: "ya",
 };
+
+function slugify(title, order) {
+  const base = title
+    .toLowerCase()
+    .split("")
+    .map((ch) => CYR_TO_LAT[ch] ?? ch)
+    .join("")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${String(order).padStart(2, "0")}-${base || "project"}`;
+}
+
+/** Число в начале имени файла: 1xxx → 1, 10xxx → 10 */
+function leadingNumber(filename) {
+  const m = path.parse(filename).name.match(/^(\d+)/);
+  return m ? Number(m[1]) : null;
+}
+
+function sortByLeadingNumber(a, b) {
+  const na = leadingNumber(a);
+  const nb = leadingNumber(b);
+  if (na !== null && nb !== null && na !== nb) return na - nb;
+  if (na !== null && nb === null) return -1;
+  if (na === null && nb !== null) return 1;
+  return a.localeCompare(b, "ru", { numeric: true });
+}
+
+/** "1 дом в п. Колодищи" → { order: 1, title: "дом в п. Колодищи" } */
+function parseProjectDir(dirName) {
+  const m = dirName.match(/^(\d+)\s+(.+)$/u);
+  if (!m) return null;
+  return { order: Number(m[1]), title: m[2].trim() };
+}
+
+async function rmrf(dir) {
+  await fs.rm(dir, { recursive: true, force: true });
+}
 
 async function ensureDir(dir) {
   await fs.mkdir(dir, { recursive: true });
 }
 
+/**
+ * Максимальное сжатие без заметной потери качества:
+ * WebP q=82 + effort=6, без EXIF, до 1920px по длинной стороне.
+ */
 async function optimizeFile(inputPath, outputPath) {
   await sharp(inputPath)
     .rotate()
-    .resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true })
-    .webp({ quality: 78, effort: 4 })
+    .resize({
+      width: 1920,
+      height: 1920,
+      fit: "inside",
+      withoutEnlargement: true,
+    })
+    .webp({
+      quality: 82,
+      alphaQuality: 85,
+      effort: 6,
+      smartSubsample: true,
+    })
     .toFile(outputPath);
 }
 
 async function main() {
+  await rmrf(OUT);
   await ensureDir(OUT);
-  const dirs = await fs.readdir(SRC, { withFileTypes: true });
+
+  const dirs = (await fs.readdir(SRC, { withFileTypes: true })).filter((d) =>
+    d.isDirectory(),
+  );
+
   const manifest = [];
 
   for (const dir of dirs) {
-    if (!dir.isDirectory()) continue;
-    const meta = PROJECTS[dir.name];
-    if (!meta) {
-      console.warn(`Skip unmapped folder: ${dir.name}`);
+    const parsed = parseProjectDir(dir.name);
+    if (!parsed) {
+      console.warn(`Skip folder (no leading order): ${dir.name}`);
       continue;
     }
 
+    const { order, title } = parsed;
+    const slug = slugify(title, order);
     const srcDir = path.join(SRC, dir.name);
-    const outDir = path.join(OUT, meta.slug);
+    const outDir = path.join(OUT, slug);
     await ensureDir(outDir);
 
     const files = (await fs.readdir(srcDir))
       .filter((f) => /\.(jpe?g|png|webp)$/i.test(f))
-      .sort((a, b) => a.localeCompare(b, "ru"));
+      .sort(sortByLeadingNumber);
 
+    if (files.length === 0) {
+      console.warn(`Empty: ${dir.name}`);
+      continue;
+    }
+
+    const coverName =
+      files.find((f) => leadingNumber(f) === 1) ?? files[0];
+
+    /** @type {string[]} */
     const images = [];
+    let coverPath = "";
+
     for (const file of files) {
-      const base = path.parse(file).name.replace(/[^a-zA-Z0-9_-]+/g, "-").toLowerCase();
-      const outName = `${base}.webp`;
+      const num = leadingNumber(file);
+      const rest = path
+        .parse(file)
+        .name.replace(/^\d+/, "")
+        .replace(/[^a-zA-Z0-9_-]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .toLowerCase();
+      const outName = `${num ?? "x"}-${rest || "photo"}.webp`;
       const inputPath = path.join(srcDir, file);
       const outputPath = path.join(outDir, outName);
       await optimizeFile(inputPath, outputPath);
-      images.push(`/portfolio/${meta.slug}/${outName}`);
+      const publicPath = `/portfolio/${slug}/${outName}`;
+      images.push(publicPath);
+      if (file === coverName) coverPath = publicPath;
       process.stdout.write(".");
     }
 
+    if (!coverPath) coverPath = images[0];
+
     manifest.push({
-      slug: meta.slug,
-      title: meta.title,
-      location: meta.location,
-      cover: images[0],
+      order,
+      slug,
+      title,
+      location: "",
+      cover: coverPath,
       images,
     });
-    console.log(`\n${meta.slug}: ${images.length} images`);
+
+    console.log(`\n#${order} ${slug}: ${images.length} images, cover=${path.basename(coverPath)}`);
   }
 
-  manifest.sort((a, b) => a.title.localeCompare(b.title, "ru"));
-  await fs.writeFile(
-    path.join(ROOT, "src", "data", "portfolio.json"),
-    JSON.stringify(manifest, null, 2),
-    "utf8",
-  );
-  console.log(`\nDone. Projects: ${manifest.length}`);
+  manifest.sort((a, b) => a.order - b.order);
+
+  await ensureDir(path.dirname(MANIFEST));
+  await fs.writeFile(MANIFEST, JSON.stringify(manifest, null, 2), "utf8");
+
+  const outSize = (
+    await fs.readdir(OUT, { recursive: true, withFileTypes: true })
+  )
+    .filter((e) => e.isFile())
+    .length;
+
+  console.log(`\nDone. Projects: ${manifest.length}, files: ${outSize}`);
 }
 
 main().catch((err) => {
