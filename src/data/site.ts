@@ -10,4 +10,12 @@ export const site = {
   email: "ortstudio@gmail.com",
   city: "Минск",
   locale: "ru_BY",
+  instagram: {
+    label: "instagram.com/ortstudio.by",
+    href: "https://www.instagram.com/ortstudio.by/",
+  },
+  telegram: {
+    label: "@ortstudio_interior",
+    href: "https://t.me/ortstudio_interior",
+  },
 } as const;
