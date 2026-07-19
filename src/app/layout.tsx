@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { Header } from "@/components/Header";
+import { YANDEX_METRIKA_ID } from "@/lib/metrika";
 import { site } from "@/data/site";
 import "./globals.css";
-
-const YANDEX_METRIKA_ID = 110848554;
 
 const harmony = localFont({
   src: [

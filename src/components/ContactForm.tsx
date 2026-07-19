@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { METRIKA_GOAL_CONTACT_FORM, reachMetrikaGoal } from "@/lib/metrika";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -35,6 +36,7 @@ export function ContactForm() {
         throw new Error(json.error || "Не удалось отправить заявку");
       }
 
+      reachMetrikaGoal(METRIKA_GOAL_CONTACT_FORM);
       setStatus("success");
       setMessage("Заявка отправлена. Мы свяжемся с вами в ближайшее время.");
       form.reset();
@@ -49,7 +51,12 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4" noValidate>
+    <form
+      id="contact-form"
+      onSubmit={onSubmit}
+      className="space-y-4"
+      noValidate
+    >
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="mb-2 block text-sm text-ink-muted">Имя</span>
