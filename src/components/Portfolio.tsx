@@ -321,7 +321,13 @@ export function Portfolio({ projects }: PortfolioProps) {
   const [active, setActive] = useState<PortfolioProject | null>(null);
   const [index, setIndex] = useState(0);
 
-  const close = useCallback(() => setActive(null), []);
+  const close = useCallback(() => {
+    setActive(null);
+    // Убираем фокус с кнопки проекта — иначе после Esc остаётся чёрная рамка
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, []);
   const prev = useCallback(() => {
     if (!active) return;
     setIndex((i) => (i - 1 + active.images.length) % active.images.length);
@@ -361,7 +367,7 @@ export function Portfolio({ projects }: PortfolioProps) {
                 setActive(project);
                 setIndex(0);
               }}
-              className="group text-left"
+              className="group text-left outline-none focus:outline-none focus-visible:outline-none"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-line">
                 <Image
