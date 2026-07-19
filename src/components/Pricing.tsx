@@ -8,36 +8,29 @@ export function Pricing() {
         <div className="max-w-2xl">
           <SectionHeading>Стоимость</SectionHeading>
           <p className="mt-4 text-base leading-relaxed text-ink-muted md:text-lg">
-            Два формата работы — от полного дизайн-проекта до реализации с
-            авторским надзором.
+            Три формата работы — от планировки до полного проекта с авторским
+            надзором.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {pricingPackages.map((pkg) => (
             <article
               key={pkg.id}
-              className="flex flex-col border border-line bg-bg-elevated p-7 md:p-9"
+              className="flex flex-col border border-line bg-bg-elevated p-7 md:p-8"
             >
-              <h3 className="text-2xl font-medium text-ink md:text-3xl">{pkg.title}</h3>
-              <p className="mt-2 text-sm text-ink-muted">{pkg.priceNote}</p>
-              <p className="mt-6 text-4xl font-medium text-accent md:text-5xl">
+              <h3 className="text-xl font-medium leading-snug text-ink md:text-2xl">
+                {pkg.title}
+              </h3>
+              <p className="mt-6 text-3xl font-medium text-accent md:text-4xl">
                 {pkg.priceLabel}
               </p>
-              <p className="mt-4 text-base leading-relaxed text-ink-muted">
+              <p className="mt-5 flex-1 text-sm leading-relaxed text-ink-muted md:text-base">
                 {pkg.description}
               </p>
-              <ul className="mt-8 space-y-3 border-t border-line pt-6">
-                {pkg.includes.map((item) => (
-                  <li key={item} className="flex gap-3 text-sm text-ink md:text-base">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
               <a
                 href="#contacts"
-                className="mt-10 inline-flex w-fit rounded-full bg-ink px-5 py-3 text-sm text-bg transition-colors hover:bg-accent"
+                className="mt-8 inline-flex w-fit rounded-full bg-ink px-5 py-3 text-sm text-bg transition-colors hover:bg-accent"
               >
                 Запросить расчёт
               </a>
