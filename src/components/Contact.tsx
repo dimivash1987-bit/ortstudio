@@ -40,10 +40,6 @@ export function Contact() {
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-ink-muted">Город</dt>
-              <dd className="mt-1 text-xl text-ink md:text-2xl">{site.city}</dd>
-            </div>
-            <div>
               <dt className="text-sm text-ink-muted">Instagram</dt>
               <dd className="mt-1">
                 <a
