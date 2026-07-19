@@ -63,6 +63,14 @@ function ZoomableImage({
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
   const lastTap = useRef(0);
   const moved = useRef(false);
+  const suppressClick = useRef(false);
+  const mouseDrag = useRef<{
+    type: "swipe" | "pan";
+    startX: number;
+    startY: number;
+    ox: number;
+    oy: number;
+  } | null>(null);
 
   const apply = useCallback((nextScale: number, nextOffset: { x: number; y: number }) => {
     const s = Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
@@ -76,6 +84,53 @@ function ZoomableImage({
   useEffect(() => {
     apply(1, { x: 0, y: 0 });
   }, [src, apply]);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const drag = mouseDrag.current;
+      if (!drag) return;
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+        moved.current = true;
+        suppressClick.current = true;
+      }
+      if (drag.type === "pan") {
+        apply(scaleRef.current, {
+          x: drag.ox + dx,
+          y: drag.oy + dy,
+        });
+      }
+    };
+
+    const onUp = (e: MouseEvent) => {
+      const drag = mouseDrag.current;
+      if (!drag) return;
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+
+      if (
+        drag.type === "swipe" &&
+        scaleRef.current <= 1 &&
+        Math.abs(dx) >= SWIPE_THRESHOLD &&
+        Math.abs(dx) > Math.abs(dy)
+      ) {
+        suppressClick.current = true;
+        if (dx < 0) onSwipeLeft();
+        else onSwipeRight();
+      }
+
+      mouseDrag.current = null;
+      setGesturing(false);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [apply, onSwipeLeft, onSwipeRight]);
 
   const onTouchStart = (e: ReactTouchEvent) => {
     e.stopPropagation();
@@ -184,16 +239,49 @@ function ZoomableImage({
     setGesturing(false);
   };
 
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    moved.current = false;
+    suppressClick.current = false;
+    setGesturing(true);
+
+    if (scaleRef.current > 1) {
+      mouseDrag.current = {
+        type: "pan",
+        startX: e.clientX,
+        startY: e.clientY,
+        ox: offsetRef.current.x,
+        oy: offsetRef.current.y,
+      };
+    } else {
+      mouseDrag.current = {
+        type: "swipe",
+        startX: e.clientX,
+        startY: e.clientY,
+        ox: 0,
+        oy: 0,
+      };
+    }
+  };
+
   return (
     <div
-      className="absolute inset-0 z-[1] touch-none overflow-hidden"
+      className={`absolute inset-0 z-[1] touch-none overflow-hidden ${
+        scale > 1 ? "cursor-move" : "cursor-grab active:cursor-grabbing"
+      }`}
       onClick={() => {
+        if (suppressClick.current || moved.current) {
+          suppressClick.current = false;
+          return;
+        }
         if (scaleRef.current > 1) {
           apply(1, { x: 0, y: 0 });
         } else {
           onRequestClose();
         }
       }}
+      onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -214,7 +302,15 @@ function ZoomableImage({
             transition: gesturing ? "none" : "transform 0.2s ease",
             transformOrigin: "center center",
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            // клик по картинке не закрывает; после драга — не сбрасываем suppress
+            e.stopPropagation();
+          }}
+          onMouseDown={(e) => {
+            // начинаем жест с картинки (всплывёт в родителя через тот же handler — дублируем старт здесь не нужно)
+            e.stopPropagation();
+            onMouseDown(e);
+          }}
         />
       </div>
     </div>
