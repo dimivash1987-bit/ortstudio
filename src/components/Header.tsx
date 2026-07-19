@@ -43,7 +43,7 @@ export function Header() {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:h-20 md:px-8">
           <a
-            href="#top"
+            href="/"
             className={`relative z-50 text-lg font-medium uppercase tracking-[0.06em] md:text-xl ${
               barSolid ? "text-ink" : "text-white"
             }`}

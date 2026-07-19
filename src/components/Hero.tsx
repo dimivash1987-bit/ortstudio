@@ -7,7 +7,7 @@ type HeroProps = {
 
 export function Hero({ imageSrc }: HeroProps) {
   return (
-    <section id="top" className="relative min-h-[100svh] overflow-hidden">
+    <section className="relative min-h-[100svh] overflow-hidden">
       <Image
         src={imageSrc}
         alt="Интерьер, спроектированный ORTSTUDIO"
