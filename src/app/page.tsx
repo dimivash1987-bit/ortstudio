@@ -6,7 +6,15 @@ import { Portfolio, type PortfolioProject } from "@/components/Portfolio";
 import { Pricing } from "@/components/Pricing";
 import portfolioData from "@/data/portfolio.json";
 
-const projects = (portfolioData as PortfolioProject[]).slice();
+const titleOverrides: Record<string, string> = {
+  "03-dvuhurovnevaya-kvartira-v-zhk-zelenaya-gavan":
+    "квартира в ЖК Зеленая Гавань",
+};
+
+const projects = (portfolioData as PortfolioProject[]).map((p) => ({
+  ...p,
+  title: titleOverrides[p.slug] ?? p.title,
+}));
 
 const heroImage = projects[0]?.cover ?? "/portfolio/placeholder.webp";
 
