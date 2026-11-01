@@ -4,17 +4,12 @@ const facts = [
   {
     value: "50+",
     label: "проектов",
-    text: "Жилые и общественные объекты: от квартиры до пространства, которое нужно реализовать.",
+    text: "Жилые и общественные объекты: от проекта до воплощения.",
   },
   {
     value: "15 лет",
-    label: "в этой сфере",
+    label: "опыта",
     text: "Проектирование и реализация интерьеров, а не только визуализация.",
-  },
-  {
-    value: "МГАСК и БНТУ",
-    label: "архитектурное образование",
-    text: "Высшее архитектурное образование руководителя студии.",
   },
 ];
 
@@ -29,7 +24,7 @@ export function Trust() {
   return (
     <section id="about" className="scroll-mt-24 border-b border-line bg-bg px-5 py-14 md:px-8 md:py-20">
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2">
           {facts.map((fact) => (
             <div key={fact.label} className="border-t border-line pt-5">
               <p className="text-3xl font-medium text-accent">{fact.value}</p>
@@ -56,7 +51,6 @@ export function Trust() {
             <h2 className="mt-2 text-3xl font-medium text-ink md:text-4xl">
               Андрей Ортюх
             </h2>
-            <p className="mt-2 text-lg text-ink">Дизайнер интерьера</p>
             <div className="mt-6 space-y-4 text-base leading-relaxed text-ink-muted">
               {about.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>

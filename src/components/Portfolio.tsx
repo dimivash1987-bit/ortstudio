@@ -370,9 +370,6 @@ export function Portfolio({ projects }: PortfolioProps) {
     <section id="portfolio" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
         <SectionHeading>Портфолио</SectionHeading>
-        <p className="mt-4 max-w-xl text-base text-ink-muted">
-          Четыре проекта в Минске и области. Остальные работы можно открыть ниже.
-        </p>
 
         <div className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((project) => {

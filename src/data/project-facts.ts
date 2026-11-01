@@ -66,4 +66,6 @@ export const featuredProjectSlugs = [
   "03-dvuhurovnevaya-kvartira-v-zhk-zelenaya-gavan",
   "15-kvartira-v-zhk-mayak-minska",
   "01-dom-v-p-kolodischi",
+  "09-kvartira-v-zhk-severnyy-bereg",
+  "13-kvartira-v-zhk-vershina",
 ];
