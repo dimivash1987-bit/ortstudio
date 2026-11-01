@@ -45,7 +45,7 @@ export function Trust() {
           <div className="relative aspect-[4/5] overflow-hidden bg-line">
             <Image
               src="/about/director.jpg"
-              alt="Руководитель студии ORTSTUDIO"
+              alt="Андрей Ортюх, руководитель студии ORTSTUDIO"
               fill
               sizes="(max-width: 1024px) 100vw, 280px"
               className="object-cover object-[center_20%]"
@@ -54,8 +54,9 @@ export function Trust() {
           <div>
             <p className="text-sm text-ink-muted">Руководитель студии</p>
             <h2 className="mt-2 text-3xl font-medium text-ink md:text-4xl">
-              Дизайнер интерьера
+              Андрей Ортюх
             </h2>
+            <p className="mt-2 text-lg text-ink">Дизайнер интерьера</p>
             <div className="mt-6 space-y-4 text-base leading-relaxed text-ink-muted">
               {about.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
