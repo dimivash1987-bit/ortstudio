@@ -70,6 +70,16 @@ export function Header() {
               </a>
             ))}
             <a
+              href={site.phoneHref}
+              className={`whitespace-nowrap text-sm font-medium transition-colors ${
+                barSolid
+                  ? "text-ink hover:text-accent"
+                  : "text-white hover:text-white/80"
+              }`}
+            >
+              {site.phoneDisplay}
+            </a>
+            <a
               href="#contacts"
               className={`rounded-full px-4 py-2 text-sm transition-colors ${
                 barSolid
