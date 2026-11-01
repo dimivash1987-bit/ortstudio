@@ -81,6 +81,15 @@ export function Header() {
             </a>
           </nav>
 
+          <a
+            href={site.phoneHref}
+            className={`relative z-50 whitespace-nowrap text-sm font-medium md:hidden ${
+              barSolid ? "text-ink" : "text-white"
+            }`}
+          >
+            {site.phoneDisplay}
+          </a>
+
           <button
             type="button"
             className="relative z-50 flex h-11 w-11 shrink-0 items-center justify-center md:hidden"
@@ -139,6 +148,27 @@ export function Header() {
             Оставить заявку
           </a>
         </nav>
+      </div>
+
+      <div
+        className={`fixed inset-x-0 bottom-0 z-50 border-t border-line bg-bg p-3 md:hidden ${
+          open ? "hidden" : ""
+        }`}
+      >
+        <div className="grid grid-cols-2 gap-2">
+          <a
+            href={site.phoneHref}
+            className="rounded-full bg-accent px-4 py-3 text-center text-sm font-medium text-white"
+          >
+            Позвонить
+          </a>
+          <a
+            href={site.telegram.href}
+            className="rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink"
+          >
+            Telegram
+          </a>
+        </div>
       </div>
     </>
   );

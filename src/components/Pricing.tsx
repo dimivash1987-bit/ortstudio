@@ -1,3 +1,4 @@
+import { PackageIncludes } from "@/components/PackageIncludes";
 import { pricingDisclaimer, pricingPackages } from "@/data/pricing";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -37,23 +38,11 @@ export function Pricing() {
                   </p>
                 ) : null}
                 {pkg.includes?.length ? (
-                  <div className="mt-5">
-                    <p className="text-sm font-medium text-ink md:text-base">
-                      {pkg.includesLabel}
-                    </p>
-                    <ul className="mt-3 space-y-2 text-sm leading-relaxed text-ink-muted md:text-base">
-                      {pkg.includes.map((item) => (
-                        <li key={item} className="flex gap-2">
-                          <span className="mt-[0.55em] h-1 w-1 shrink-0 rounded-full bg-accent" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <PackageIncludes label={pkg.includesLabel} items={pkg.includes} />
                 ) : null}
               </div>
               <a
-                href="#contacts"
+                href="#calculator"
                 className="mt-8 inline-flex w-fit rounded-full bg-ink px-5 py-3 text-sm text-bg transition-colors hover:bg-accent"
               >
                 Запросить расчёт

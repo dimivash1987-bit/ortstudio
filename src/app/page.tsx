@@ -1,9 +1,11 @@
 import { Advantages } from "@/components/Advantages";
+import { Calculator } from "@/components/Calculator";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { Portfolio, type PortfolioProject } from "@/components/Portfolio";
 import { Pricing } from "@/components/Pricing";
+import { Trust } from "@/components/Trust";
 import portfolioData from "@/data/portfolio.json";
 
 const titleOverrides: Record<string, string> = {
@@ -22,8 +24,10 @@ export default function Home() {
   return (
     <main>
       <Hero imageSrc={heroImage} />
+      <Trust />
       <Portfolio projects={projects} />
       <Advantages />
+      <Calculator />
       <Pricing />
       <Contact />
       <Footer />

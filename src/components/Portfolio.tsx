@@ -9,6 +9,10 @@ import {
   type TouchEvent as ReactTouchEvent,
 } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
+import {
+  featuredProjectSlugs,
+  projectFacts,
+} from "@/data/project-facts";
 
 export type PortfolioProject = {
   slug: string;
@@ -318,6 +322,7 @@ function ZoomableImage({
 }
 
 export function Portfolio({ projects }: PortfolioProps) {
+  const [showAll, setShowAll] = useState(false);
   const [active, setActive] = useState<PortfolioProject | null>(null);
   const [index, setIndex] = useState(0);
 
@@ -353,42 +358,65 @@ export function Portfolio({ projects }: PortfolioProps) {
     };
   }, [active, close, prev, next]);
 
+  const featured = featuredProjectSlugs
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project): project is PortfolioProject => Boolean(project));
+  const rest = projects.filter(
+    (project) => !featuredProjectSlugs.includes(project.slug),
+  );
+  const visible = showAll ? [...featured, ...rest] : featured;
+
   return (
     <section id="portfolio" className="scroll-mt-24 px-5 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
         <SectionHeading>Портфолио</SectionHeading>
+        <p className="mt-4 max-w-xl text-base text-ink-muted">
+          Четыре проекта в Минске и области. Остальные работы можно открыть ниже.
+        </p>
 
         <div className="mt-12 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <button
-              key={project.slug}
-              type="button"
-              onClick={() => {
-                setActive(project);
-                setIndex(0);
-              }}
-              className="group text-left outline-none focus:outline-none focus-visible:outline-none"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-line">
-                <Image
-                  src={project.cover}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                />
-              </div>
-              <div className="mt-2 flex items-baseline justify-between gap-3">
-                <h3 className="text-lg text-ink">{project.title}</h3>
-                {project.location ? (
-                  <span className="shrink-0 text-sm text-ink-muted">
-                    {project.location}
-                  </span>
+          {visible.map((project) => {
+            const fact = projectFacts[project.slug];
+            return (
+              <button
+                key={project.slug}
+                type="button"
+                onClick={() => {
+                  setActive(project);
+                  setIndex(0);
+                }}
+                className="group text-left outline-none focus:outline-none focus-visible:outline-none"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-line">
+                  <Image
+                    src={project.cover}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  />
+                </div>
+                <h3 className="mt-2 text-lg text-ink">{project.title}</h3>
+                {fact ? (
+                  <p className="mt-1 text-sm text-ink-muted">
+                    {fact.place} · {fact.delivered}
+                  </p>
                 ) : null}
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
+
+        {rest.length > 0 ? (
+          <button
+            type="button"
+            className="mt-10 rounded-full border border-line px-5 py-3 text-sm text-ink transition-colors hover:border-accent hover:text-accent-ink"
+            onClick={() => setShowAll((value) => !value)}
+            aria-expanded={showAll}
+          >
+            {showAll ? "Свернуть" : `Ещё проекты · ${rest.length}`}
+          </button>
+        ) : null}
       </div>
 
       {active ? (

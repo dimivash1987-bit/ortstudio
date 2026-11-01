@@ -2,6 +2,7 @@ export type PricingPackage = {
   id: string;
   title: string;
   priceLabel: string;
+  pricePerSqm: number;
   description: string;
   details?: string;
   includesLabel?: string;
@@ -13,6 +14,7 @@ export const pricingPackages: PricingPackage[] = [
     id: "planning",
     title: "Планировочное решение + схема электрики",
     priceLabel: "30 руб/м²",
+    pricePerSqm: 30,
     description:
       "Для тех, кто готов самостоятельно решать визуальную часть проекта, подбирать и считать отделочные материалы, заниматься стройкой, но нет понимания, как грамотно распорядиться площадью квартиры, а именно возвести или перенести стены или перегородки, функционально расставить мебель, сантехническое оборудование и выполнить разводку электрики.",
     includesLabel: "В технический дизайн-проект входит:",
@@ -27,6 +29,7 @@ export const pricingPackages: PricingPackage[] = [
     id: "project",
     title: "Полный дизайн-проект",
     priceLabel: "90 руб/м²",
+    pricePerSqm: 90,
     description:
       "Для тех, кто решил сам заниматься стройкой и готов к самостоятельному решению всех вопросов в процессе строительных и отделочных работ, но для этого необходимы все чертежи, визуализации и сметы используемых материалов и комплектующих.",
     details:
@@ -54,6 +57,7 @@ export const pricingPackages: PricingPackage[] = [
     id: "supervision",
     title: "Полный дизайн-проект + авторский надзор",
     priceLabel: "150 руб/м²",
+    pricePerSqm: 150,
     description:
       "Для тех, кто не готов к самостоятельному решению всех вопросов в процессе строительных и отделочных работ и склонен делегировать весь этот процесс.",
   },

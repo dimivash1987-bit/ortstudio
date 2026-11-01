@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { METRIKA_GOAL_CONTACT_FORM, reachMetrikaGoal } from "@/lib/metrika";
+import { submitLead } from "@/lib/submit-lead";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -18,25 +18,14 @@ export function ContactForm() {
     const data = new FormData(form);
 
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.get("name"),
-          phone: data.get("phone"),
-          email: data.get("email"),
-          area: data.get("area"),
-          message: data.get("message"),
-          website: data.get("website"),
-        }),
+      await submitLead({
+        name: String(data.get("name") ?? ""),
+        phone: String(data.get("phone") ?? ""),
+        email: String(data.get("email") ?? ""),
+        area: String(data.get("area") ?? ""),
+        message: String(data.get("message") ?? ""),
+        website: String(data.get("website") ?? ""),
       });
-
-      const json = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok || !json.ok) {
-        throw new Error(json.error || "Не удалось отправить заявку");
-      }
-
-      reachMetrikaGoal(METRIKA_GOAL_CONTACT_FORM);
       setStatus("success");
       setMessage("Заявка отправлена. Мы свяжемся с вами в ближайшее время.");
       form.reset();
