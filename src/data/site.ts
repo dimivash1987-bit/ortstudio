@@ -3,7 +3,7 @@ export const site = {
   tagline: "Авторский дизайн интерьера в Минске",
   description:
     "ORTSTUDIO — авторский дизайн интерьера в Минске: от проекта до воплощения. Планировка, реальные материалы, понятные чертежи и реализация.",
-  url: "https://ortstudio.vercel.app",
+  url: "https://www.ortstudio.by",
   phone: "+375293676449",
   phoneDisplay: "+375 (29) 367-64-49",
   phoneHref: "tel:+375293676449",
