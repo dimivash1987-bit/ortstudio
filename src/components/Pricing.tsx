@@ -13,7 +13,7 @@ export function Pricing() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3 lg:items-stretch">
+        <div className="mt-12 grid gap-6 lg:grid-cols-3 lg:items-start">
           {pricingPackages.map((pkg) => (
             <article
               key={pkg.id}
@@ -27,9 +27,31 @@ export function Pricing() {
               <p className="mt-4 text-3xl font-medium text-accent md:text-4xl">
                 {pkg.priceLabel}
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted md:text-base">
-                {pkg.description}
-              </p>
+              <div className="mt-4">
+                <p className="text-sm leading-relaxed text-ink-muted md:text-base">
+                  {pkg.description}
+                </p>
+                {pkg.details ? (
+                  <p className="mt-4 text-sm leading-relaxed text-ink-muted md:text-base">
+                    {pkg.details}
+                  </p>
+                ) : null}
+                {pkg.includes?.length ? (
+                  <div className="mt-5">
+                    <p className="text-sm font-medium text-ink md:text-base">
+                      {pkg.includesLabel}
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm leading-relaxed text-ink-muted md:text-base">
+                      {pkg.includes.map((item) => (
+                        <li key={item} className="flex gap-2">
+                          <span className="mt-[0.55em] h-1 w-1 shrink-0 rounded-full bg-accent" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
               <a
                 href="#contacts"
                 className="mt-8 inline-flex w-fit rounded-full bg-ink px-5 py-3 text-sm text-bg transition-colors hover:bg-accent"
