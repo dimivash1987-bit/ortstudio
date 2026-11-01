@@ -1,16 +1,8 @@
 import Image from "next/image";
 
 const facts = [
-  {
-    value: "50+",
-    label: "проектов",
-    text: "Жилые и общественные объекты: от проекта до воплощения.",
-  },
-  {
-    value: "15 лет",
-    label: "опыта",
-    text: "Проектирование и реализация интерьеров, а не только визуализация.",
-  },
+  { value: "50+", label: "проектов" },
+  { value: "15 лет", label: "опыта" },
 ];
 
 const about = [
@@ -29,9 +21,6 @@ export function Trust() {
             <div key={fact.label} className="border-t border-line pt-5">
               <p className="text-3xl font-medium text-accent">{fact.value}</p>
               <p className="mt-1 text-lg font-medium text-ink">{fact.label}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-muted md:text-base">
-                {fact.text}
-              </p>
             </div>
           ))}
         </div>
