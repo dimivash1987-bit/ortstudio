@@ -155,7 +155,7 @@ export function Header() {
           open ? "hidden" : ""
         }`}
       >
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <a
             href={site.phoneHref}
             className="rounded-full bg-accent px-4 py-3 text-center text-sm font-medium text-white"
@@ -167,6 +167,12 @@ export function Header() {
             className="rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink"
           >
             Telegram
+          </a>
+          <a
+            href={site.viber.href}
+            className="rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink"
+          >
+            Viber
           </a>
         </div>
       </div>

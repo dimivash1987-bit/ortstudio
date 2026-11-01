@@ -18,4 +18,8 @@ export const site = {
     label: "@ortstudio_interior",
     href: "https://t.me/ortstudio_interior",
   },
+  viber: {
+    label: "+375 (29) 367-64-49",
+    href: "viber://chat?number=%2B375293676449",
+  },
 } as const;

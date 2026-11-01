@@ -65,6 +65,17 @@ export function Contact() {
                 </a>
               </dd>
             </div>
+            <div>
+              <dt className="text-sm text-ink-muted">Viber</dt>
+              <dd className="mt-1">
+                <a
+                  href={site.viber.href}
+                  className="text-xl text-ink transition-colors hover:text-accent md:text-2xl"
+                >
+                  {site.viber.label}
+                </a>
+              </dd>
+            </div>
           </dl>
         </div>
 

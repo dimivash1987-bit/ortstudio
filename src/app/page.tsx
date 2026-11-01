@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { Portfolio, type PortfolioProject } from "@/components/Portfolio";
 import { Pricing } from "@/components/Pricing";
+import { Reviews } from "@/components/Reviews";
 import { Trust } from "@/components/Trust";
 import portfolioData from "@/data/portfolio.json";
 
@@ -26,6 +27,7 @@ export default function Home() {
       <Hero imageSrc={heroImage} />
       <Trust />
       <Portfolio projects={projects} />
+      <Reviews />
       <Advantages />
       <Calculator />
       <Pricing />
